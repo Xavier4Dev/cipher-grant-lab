@@ -24,14 +24,34 @@ const Header = () => {
           </div>
         </div>
         
-        <Button 
-          variant="outline" 
-          onClick={handleWalletConnect}
-          className="glass-morphism hover:bg-primary hover:text-primary-foreground transition-all duration-300"
-        >
-          <Wallet className="w-4 h-4 mr-2" />
-          Connect Wallet
-        </Button>
+        <nav className="hidden md:flex items-center space-x-6">
+          <a href="/" className="text-foreground hover:text-primary transition-colors">
+            Home
+          </a>
+          <a href="/submit-proposal" className="text-foreground hover:text-primary transition-colors">
+            Submit Proposal
+          </a>
+          <a href="/review" className="text-foreground hover:text-primary transition-colors">
+            Review
+          </a>
+          <a href="/vote" className="text-foreground hover:text-primary transition-colors">
+            Vote
+          </a>
+        </nav>
+        
+        <div className="flex items-center space-x-4">
+          <Button asChild variant="ghost" className="glass-morphism">
+            <a href="/join-dao">Join DAO</a>
+          </Button>
+          <Button 
+            variant="outline" 
+            onClick={handleWalletConnect}
+            className="glass-morphism hover:bg-primary hover:text-primary-foreground transition-all duration-300"
+          >
+            <Wallet className="w-4 h-4 mr-2" />
+            Connect Wallet
+          </Button>
+        </div>
       </div>
     </header>
   );

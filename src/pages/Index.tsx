@@ -82,11 +82,11 @@ const Index = () => {
             ensuring unbiased funding decisions based on scientific merit alone.
           </p>
           <div className="flex justify-center space-x-4">
-            <Button size="lg" className="bg-gradient-dna hover:opacity-90 transition-opacity">
-              Submit Proposal
+            <Button asChild size="lg" className="bg-gradient-dna hover:opacity-90 transition-opacity">
+              <a href="/submit-proposal">Submit Proposal</a>
             </Button>
-            <Button variant="outline" size="lg" className="glass-morphism">
-              Join DAO
+            <Button asChild variant="outline" size="lg" className="glass-morphism">
+              <a href="/join-dao">Join DAO</a>
             </Button>
           </div>
         </div>
@@ -134,8 +134,8 @@ const Index = () => {
         </div>
         
         <div className="text-center mt-12">
-          <Button variant="outline" size="lg" className="glass-morphism">
-            View All Proposals
+          <Button asChild variant="outline" size="lg" className="glass-morphism">
+            <a href="/review">View All Proposals</a>
           </Button>
         </div>
       </section>
