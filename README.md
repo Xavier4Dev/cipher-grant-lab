@@ -1,73 +1,124 @@
-# Welcome to your Lovable project
+# Cipher Grant Lab
 
-## Project info
+A privacy-preserving grant management platform built with FHE (Fully Homomorphic Encryption) technology. This platform enables secure, private grant applications and reviews while maintaining data confidentiality.
 
-**URL**: https://lovable.dev/projects/897e1075-a7a5-4221-a4ab-553b41fe42e6
+## Features
 
-## How can I edit this code?
+- **Privacy-First Design**: All sensitive data is encrypted using FHE technology
+- **Wallet Integration**: Seamless connection with popular Web3 wallets via RainbowKit
+- **Grant Management**: Create, apply for, and manage grants with encrypted data
+- **Secure Reviews**: Review applications with privacy-preserving scoring
+- **Blockchain Integration**: Built on Ethereum Sepolia testnet
 
-There are several ways of editing your application.
+## Technologies
 
-**Use Lovable**
+- **Frontend**: React, TypeScript, Vite, Tailwind CSS
+- **UI Components**: shadcn/ui, Radix UI
+- **Web3**: RainbowKit, Wagmi, Viem
+- **Blockchain**: Hardhat, Solidity
+- **Privacy**: FHEVM, Zama FHE
+- **Styling**: Tailwind CSS, Lucide React
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/897e1075-a7a5-4221-a4ab-553b41fe42e6) and start prompting.
+## Getting Started
 
-Changes made via Lovable will be committed automatically to this repo.
+### Prerequisites
 
-**Use your preferred IDE**
+- Node.js 18+ 
+- npm or yarn
+- Git
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Installation
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+1. Clone the repository:
+```bash
+git clone https://github.com/Xavier4Dev/cipher-grant-lab.git
+cd cipher-grant-lab
+```
 
-Follow these steps:
+2. Install dependencies:
+```bash
+npm install
+```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+3. Set up environment variables:
+```bash
+# Copy the example environment file
+cp .env.example .env.local
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Edit the environment variables
+NEXT_PUBLIC_CHAIN_ID=11155111
+NEXT_PUBLIC_RPC_URL=https://sepolia.infura.io/v3/your-api-key
+NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=your-project-id
+```
 
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+4. Start the development server:
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### Smart Contract Deployment
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+1. Compile contracts:
+```bash
+npm run compile
+```
 
-**Use GitHub Codespaces**
+2. Deploy to Sepolia testnet:
+```bash
+npm run deploy
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Project Structure
 
-## What technologies are used for this project?
+```
+src/
+├── components/          # Reusable UI components
+├── pages/              # Application pages
+├── lib/                # Utility functions and configurations
+├── hooks/              # Custom React hooks
+contracts/              # Smart contracts
+├── CipherGrantLab.sol  # Main FHE contract
+├── MockERC20.sol       # Test token contract
+scripts/                # Deployment scripts
+```
 
-This project is built with:
+## Smart Contracts
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### CipherGrantLab.sol
+The main contract implementing FHE-encrypted grant management:
+- Encrypted grant creation and management
+- Private application submissions
+- Secure review and approval process
+- Token-based funding system
 
-## How can I deploy this project?
+### Key Features
+- **FHE Encryption**: All sensitive data encrypted using FHEVM
+- **Access Control**: Role-based permissions for grantors and applicants
+- **Reentrancy Protection**: Secure against common attack vectors
+- **Event Logging**: Comprehensive event system for transparency
 
-Simply open [Lovable](https://lovable.dev/projects/897e1075-a7a5-4221-a4ab-553b41fe42e6) and click on Share -> Publish.
+## Development
 
-## Can I connect a custom domain to my Lovable project?
+### Available Scripts
 
-Yes, you can!
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run compile` - Compile smart contracts
+- `npm run test` - Run contract tests
+- `npm run deploy` - Deploy contracts to network
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### Contributing
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
+
+## License
+
+MIT License - see LICENSE file for details
+
+## Support
+
+For questions and support, please open an issue on GitHub.
