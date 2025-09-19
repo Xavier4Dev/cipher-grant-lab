@@ -1,15 +1,10 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import DNALogo from './DNALogo';
-import { Wallet } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 const Header = () => {
-  const handleWalletConnect = () => {
-    // Wallet connect functionality will be implemented here
-    console.log('Connecting wallet...');
-  };
-
   return (
     <header className="w-full border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -44,14 +39,7 @@ const Header = () => {
           <Button asChild variant="ghost" className="glass-morphism">
             <Link to="/join-dao">Join DAO</Link>
           </Button>
-          <Button 
-            variant="outline" 
-            onClick={handleWalletConnect}
-            className="glass-morphism hover:bg-primary hover:text-primary-foreground transition-all duration-300"
-          >
-            <Wallet className="w-4 h-4 mr-2" />
-            Connect Wallet
-          </Button>
+          <ConnectButton />
         </div>
       </div>
     </header>
