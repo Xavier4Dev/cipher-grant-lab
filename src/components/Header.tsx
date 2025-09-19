@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import DNALogo from './DNALogo';
 import { Wallet } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   const handleWalletConnect = () => {
@@ -25,23 +26,23 @@ const Header = () => {
         </div>
         
         <nav className="hidden md:flex items-center space-x-6">
-          <a href="/" className="text-foreground hover:text-primary transition-colors">
+          <Link to="/" className="text-foreground hover:text-primary transition-colors">
             Home
-          </a>
-          <a href="/submit-proposal" className="text-foreground hover:text-primary transition-colors">
+          </Link>
+          <Link to="/submit-proposal" className="text-foreground hover:text-primary transition-colors">
             Submit Proposal
-          </a>
-          <a href="/review" className="text-foreground hover:text-primary transition-colors">
+          </Link>
+          <Link to="/review" className="text-foreground hover:text-primary transition-colors">
             Review
-          </a>
-          <a href="/vote" className="text-foreground hover:text-primary transition-colors">
+          </Link>
+          <Link to="/vote" className="text-foreground hover:text-primary transition-colors">
             Vote
-          </a>
+          </Link>
         </nav>
         
         <div className="flex items-center space-x-4">
           <Button asChild variant="ghost" className="glass-morphism">
-            <a href="/join-dao">Join DAO</a>
+            <Link to="/join-dao">Join DAO</Link>
           </Button>
           <Button 
             variant="outline" 

@@ -5,6 +5,7 @@ import ResearchProposal from '@/components/ResearchProposal';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Lock, Zap, Users, Database } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Index = () => {
   const proposals = [
@@ -83,10 +84,10 @@ const Index = () => {
           </p>
           <div className="flex justify-center space-x-4">
             <Button asChild size="lg" className="bg-gradient-dna hover:opacity-90 transition-opacity">
-              <a href="/submit-proposal">Submit Proposal</a>
+              <Link to="/submit-proposal">Submit Proposal</Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="glass-morphism">
-              <a href="/join-dao">Join DAO</a>
+              <Link to="/join-dao">Join DAO</Link>
             </Button>
           </div>
         </div>
@@ -135,7 +136,7 @@ const Index = () => {
         
         <div className="text-center mt-12">
           <Button asChild variant="outline" size="lg" className="glass-morphism">
-            <a href="/review">View All Proposals</a>
+            <Link to="/review">View All Proposals</Link>
           </Button>
         </div>
       </section>
