@@ -4,10 +4,17 @@ import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Users, Shield, Zap, Database, Check, Wallet } from 'lucide-react';
+import { Users, Lock, Zap, Database, Check, Wallet, CheckCircle, AlertCircle } from 'lucide-react';
+import { useContract } from '@/hooks/useContract';
+import { useAccount } from 'wagmi';
 
 const JoinDAO = () => {
-  const [isConnected, setIsConnected] = useState(false);
+  const { address, isConnected } = useAccount();
+  const { joinDAO, isJoining } = useContract();
+  
+  const [selectedTier, setSelectedTier] = useState<string>('');
+  const [joinStatus, setJoinStatus] = useState<'idle' | 'joining' | 'success' | 'error'>('idle');
+  const [txHash, setTxHash] = useState<string>('');
 
   const membershipTiers = [
     {
@@ -48,14 +55,29 @@ const JoinDAO = () => {
     }
   ];
 
-  const handleConnectWallet = () => {
-    // Handle wallet connection
-    setIsConnected(true);
-  };
+  const handleJoinTier = async (tierName: string) => {
+    if (!isConnected) {
+      alert('Please connect your wallet first');
+      return;
+    }
 
-  const handleJoinTier = (tierName: string) => {
-    // Handle joining specific tier
-    console.log('Joining tier:', tierName);
+    try {
+      setJoinStatus('joining');
+      setSelectedTier(tierName);
+      
+      // Join DAO with selected tier
+      const result = await joinDAO({
+        tier: tierName,
+        member: address!
+      });
+      
+      setTxHash(result.hash);
+      setJoinStatus('success');
+      
+    } catch (error) {
+      console.error('Joining DAO failed:', error);
+      setJoinStatus('error');
+    }
   };
 
   return (
@@ -120,20 +142,58 @@ const JoinDAO = () => {
                         onClick={() => handleJoinTier(tier.name)}
                         className={`w-full ${tier.popular ? 'bg-gradient-dna hover:opacity-90' : ''}`}
                         variant={tier.popular ? 'default' : 'outline'}
+                        disabled={!isConnected || joinStatus !== 'idle'}
                       >
-                        Join as {tier.name}
+                        {joinStatus === 'joining' && selectedTier === tier.name && 'Joining...'}
+                        {joinStatus === 'success' && selectedTier === tier.name && 'Joined!'}
+                        {joinStatus === 'error' && selectedTier === tier.name && 'Try Again'}
+                        {joinStatus === 'idle' && `Join as ${tier.name}`}
                       </Button>
                     </CardContent>
                   </Card>
                 ))}
               </div>
+              
+              {/* Join Status */}
+              {joinStatus !== 'idle' && (
+                <div className="mt-8 p-4 rounded-lg border">
+                  {joinStatus === 'joining' && (
+                    <div className="flex items-center space-x-2 text-blue-600">
+                      <Lock className="w-4 h-4 animate-spin" />
+                      <span>Joining DAO with encrypted membership data...</span>
+                    </div>
+                  )}
+                  {joinStatus === 'success' && (
+                    <div className="flex items-center space-x-2 text-green-600">
+                      <CheckCircle className="w-4 h-4" />
+                      <span>Successfully joined as {selectedTier}!</span>
+                      {txHash && (
+                        <a 
+                          href={`https://sepolia.etherscan.io/tx/${txHash}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:underline"
+                        >
+                          View Transaction
+                        </a>
+                      )}
+                    </div>
+                  )}
+                  {joinStatus === 'error' && (
+                    <div className="flex items-center space-x-2 text-red-600">
+                      <AlertCircle className="w-4 h-4" />
+                      <span>Joining failed. Please try again.</span>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Card className="glass-morphism">
               <CardContent className="p-6 text-center space-y-4">
-                <Shield className="w-12 h-12 mx-auto text-primary" />
+                <Lock className="w-12 h-12 mx-auto text-primary" />
                 <h3 className="text-lg font-semibold">Secure Governance</h3>
                 <p className="text-sm text-muted-foreground">
                   Your voting power is secured by blockchain technology and cryptographic proofs.

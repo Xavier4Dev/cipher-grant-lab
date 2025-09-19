@@ -4,7 +4,7 @@ import Footer from '@/components/Footer';
 import ResearchProposal from '@/components/ResearchProposal';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Shield, Zap, Users, Database } from 'lucide-react';
+import { Lock, Zap, Users, Database } from 'lucide-react';
 
 const Index = () => {
   const proposals = [
@@ -45,7 +45,7 @@ const Index = () => {
 
   const features = [
     {
-      icon: Shield,
+      icon: Lock,
       title: 'Fully Homomorphic Encryption',
       description: 'Budget proposals remain encrypted until funding decisions, ensuring fair evaluation without bias.'
     },

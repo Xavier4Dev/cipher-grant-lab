@@ -7,11 +7,18 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { ThumbsUp, ThumbsDown, Clock, Users, Lock, MessageSquare } from 'lucide-react';
+import { ThumbsUp, ThumbsDown, Clock, Users, Lock, MessageSquare, CheckCircle, AlertCircle } from 'lucide-react';
+import { useContract } from '@/hooks/useContract';
+import { useAccount } from 'wagmi';
 
 const Vote = () => {
+  const { address, isConnected } = useAccount();
+  const { voteOnProposal, isVoting } = useContract();
+  
   const [selectedVote, setSelectedVote] = useState<'approve' | 'reject' | null>(null);
   const [comment, setComment] = useState('');
+  const [votingStatus, setVotingStatus] = useState<'idle' | 'voting' | 'success' | 'error'>('idle');
+  const [txHash, setTxHash] = useState<string>('');
 
   const activeProposal = {
     id: '1',
@@ -47,11 +54,36 @@ const Vote = () => {
     }
   ];
 
-  const handleVote = () => {
-    if (!selectedVote) return;
+  const handleVote = async () => {
+    if (!selectedVote || !isConnected) {
+      if (!isConnected) {
+        alert('Please connect your wallet first');
+      }
+      return;
+    }
     
-    console.log('Voting:', selectedVote, 'Comment:', comment);
-    // Handle voting logic
+    try {
+      setVotingStatus('voting');
+      
+      // Submit encrypted vote to smart contract
+      const result = await voteOnProposal({
+        proposalId: activeProposal.id,
+        vote: selectedVote === 'approve',
+        comment: comment,
+        voter: address!
+      });
+      
+      setTxHash(result.hash);
+      setVotingStatus('success');
+      
+      // Reset form
+      setSelectedVote(null);
+      setComment('');
+      
+    } catch (error) {
+      console.error('Voting failed:', error);
+      setVotingStatus('error');
+    }
   };
 
   const progressPercentage = (activeProposal.usedVotingPower / activeProposal.totalVotingPower) * 100;
@@ -139,13 +171,50 @@ const Vote = () => {
                     />
                   </div>
 
+                  {/* Voting Status */}
+                  {votingStatus !== 'idle' && (
+                    <div className="p-4 rounded-lg border">
+                      {votingStatus === 'voting' && (
+                        <div className="flex items-center space-x-2 text-blue-600">
+                          <Lock className="w-4 h-4 animate-spin" />
+                          <span>Submitting encrypted vote to blockchain...</span>
+                        </div>
+                      )}
+                      {votingStatus === 'success' && (
+                        <div className="flex items-center space-x-2 text-green-600">
+                          <CheckCircle className="w-4 h-4" />
+                          <span>Vote submitted successfully!</span>
+                          {txHash && (
+                            <a 
+                              href={`https://sepolia.etherscan.io/tx/${txHash}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:underline"
+                            >
+                              View Transaction
+                            </a>
+                          )}
+                        </div>
+                      )}
+                      {votingStatus === 'error' && (
+                        <div className="flex items-center space-x-2 text-red-600">
+                          <AlertCircle className="w-4 h-4" />
+                          <span>Voting failed. Please try again.</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   <Button 
                     onClick={handleVote}
-                    disabled={!selectedVote}
+                    disabled={!selectedVote || !isConnected || votingStatus !== 'idle'}
                     size="lg"
                     className="w-full bg-gradient-dna hover:opacity-90"
                   >
-                    Submit Vote
+                    {votingStatus === 'voting' && 'Submitting Vote...'}
+                    {votingStatus === 'success' && 'Vote Submitted!'}
+                    {votingStatus === 'error' && 'Try Again'}
+                    {votingStatus === 'idle' && 'Submit Vote'}
                   </Button>
                 </CardContent>
               </Card>

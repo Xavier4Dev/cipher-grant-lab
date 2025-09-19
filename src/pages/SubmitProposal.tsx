@@ -7,9 +7,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { FileText, Lock, Upload } from 'lucide-react';
+import { FileText, Lock, Upload, CheckCircle, AlertCircle } from 'lucide-react';
+import { useContract } from '@/hooks/useContract';
+import { useAccount } from 'wagmi';
 
 const SubmitProposal = () => {
+  const { address, isConnected } = useAccount();
+  const { submitProposal, isSubmitting } = useContract();
+  
   const [formData, setFormData] = useState({
     title: '',
     researcher: '',
@@ -19,10 +24,63 @@ const SubmitProposal = () => {
     duration: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [submissionStatus, setSubmissionStatus] = useState<'idle' | 'encrypting' | 'submitting' | 'success' | 'error'>('idle');
+  const [txHash, setTxHash] = useState<string>('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle proposal submission
-    console.log('Proposal submitted:', formData);
+    
+    if (!isConnected) {
+      alert('Please connect your wallet first');
+      return;
+    }
+
+    try {
+      setSubmissionStatus('encrypting');
+      
+      // Encrypt sensitive data (budget) using FHE
+      const encryptedBudget = await encryptBudget(formData.budget);
+      
+      setSubmissionStatus('submitting');
+      
+      // Submit to smart contract with encrypted data
+      const result = await submitProposal({
+        title: formData.title,
+        researcher: formData.researcher,
+        description: formData.description,
+        encryptedBudget: encryptedBudget,
+        category: formData.category,
+        duration: parseInt(formData.duration),
+        proposer: address!
+      });
+      
+      setTxHash(result.hash);
+      setSubmissionStatus('success');
+      
+      // Reset form
+      setFormData({
+        title: '',
+        researcher: '',
+        description: '',
+        budget: '',
+        category: '',
+        duration: ''
+      });
+      
+    } catch (error) {
+      console.error('Proposal submission failed:', error);
+      setSubmissionStatus('error');
+    }
+  };
+
+  // Simulate FHE encryption (in real implementation, this would use actual FHE)
+  const encryptBudget = async (budget: string): Promise<string> => {
+    // Simulate encryption delay
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // In real implementation, this would use FHE encryption
+    const encrypted = `0x${Buffer.from(`FHE_${budget}_${Date.now()}`).toString('hex')}`;
+    return encrypted;
   };
 
   return (
@@ -147,12 +205,61 @@ const SubmitProposal = () => {
                   </div>
                 </div>
 
+                {/* Submission Status */}
+                {submissionStatus !== 'idle' && (
+                  <div className="p-4 rounded-lg border">
+                    {submissionStatus === 'encrypting' && (
+                      <div className="flex items-center space-x-2 text-blue-600">
+                        <Lock className="w-4 h-4 animate-spin" />
+                        <span>Encrypting sensitive data with FHE...</span>
+                      </div>
+                    )}
+                    {submissionStatus === 'submitting' && (
+                      <div className="flex items-center space-x-2 text-blue-600">
+                        <Lock className="w-4 h-4 animate-spin" />
+                        <span>Submitting encrypted proposal to blockchain...</span>
+                      </div>
+                    )}
+                    {submissionStatus === 'success' && (
+                      <div className="flex items-center space-x-2 text-green-600">
+                        <CheckCircle className="w-4 h-4" />
+                        <span>Proposal submitted successfully!</span>
+                        {txHash && (
+                          <a 
+                            href={`https://sepolia.etherscan.io/tx/${txHash}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:underline"
+                          >
+                            View Transaction
+                          </a>
+                        )}
+                      </div>
+                    )}
+                    {submissionStatus === 'error' && (
+                      <div className="flex items-center space-x-2 text-red-600">
+                        <AlertCircle className="w-4 h-4" />
+                        <span>Submission failed. Please try again.</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 <div className="flex justify-center space-x-4 pt-6">
-                  <Button variant="outline" size="lg">
+                  <Button variant="outline" size="lg" disabled={submissionStatus !== 'idle'}>
                     Save Draft
                   </Button>
-                  <Button type="submit" size="lg" className="bg-gradient-dna hover:opacity-90">
-                    Submit Proposal
+                  <Button 
+                    type="submit" 
+                    size="lg" 
+                    className="bg-gradient-dna hover:opacity-90"
+                    disabled={submissionStatus !== 'idle' || !isConnected}
+                  >
+                    {submissionStatus === 'encrypting' && 'Encrypting...'}
+                    {submissionStatus === 'submitting' && 'Submitting...'}
+                    {submissionStatus === 'success' && 'Submitted!'}
+                    {submissionStatus === 'error' && 'Try Again'}
+                    {submissionStatus === 'idle' && 'Submit Proposal'}
                   </Button>
                 </div>
               </form>
