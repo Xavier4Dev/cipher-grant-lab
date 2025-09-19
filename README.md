@@ -1,101 +1,105 @@
-# Cipher Grant Lab
+# 🔐 Cipher Grant Lab
 
-A privacy-preserving grant management platform built with FHE (Fully Homomorphic Encryption) technology. This platform enables secure, private grant applications and reviews while maintaining data confidentiality.
+> **Revolutionary Privacy-Preserving Grant Management Platform**
 
-## Features
+Transform your grant management with cutting-edge FHE (Fully Homomorphic Encryption) technology. Experience the future of secure, private funding where sensitive data remains encrypted throughout the entire process.
 
-- **Privacy-First Design**: All sensitive data is encrypted using FHE technology
-- **Wallet Integration**: Seamless connection with popular Web3 wallets via RainbowKit
-- **Grant Management**: Create, apply for, and manage grants with encrypted data
-- **Secure Reviews**: Review applications with privacy-preserving scoring
-- **Blockchain Integration**: Built on Ethereum Sepolia testnet
+## ✨ Key Innovations
 
-## Technologies
+- **🔒 Zero-Knowledge Grant Applications**: Submit proposals without revealing sensitive details
+- **🛡️ Encrypted Review Process**: Reviewers score applications without seeing raw data  
+- **⚡ Real-time Blockchain Integration**: Instant, secure transactions on Ethereum
+- **🎯 Smart Contract Automation**: Automated funding distribution based on encrypted criteria
+- **🌐 Multi-Wallet Support**: Connect with 300+ supported wallets
 
-- **Frontend**: React, TypeScript, Vite, Tailwind CSS
-- **UI Components**: shadcn/ui, Radix UI
-- **Web3**: RainbowKit, Wagmi, Viem
-- **Blockchain**: Hardhat, Solidity
-- **Privacy**: FHEVM, Zama FHE
-- **Styling**: Tailwind CSS, Lucide React
+## 🚀 Technology Stack
 
-## Getting Started
+| Category | Technologies |
+|----------|-------------|
+| **Frontend** | React 18, TypeScript, Vite, Tailwind CSS |
+| **Web3** | RainbowKit, Wagmi, Viem, Ethers.js |
+| **Blockchain** | Hardhat, Solidity 0.8.19, FHEVM |
+| **Privacy** | Zama FHE, Homomorphic Encryption |
+| **UI/UX** | shadcn/ui, Radix UI, Lucide Icons |
 
-### Prerequisites
+## 🛠️ Quick Start Guide
 
-- Node.js 18+ 
-- npm or yarn
-- Git
+### 📋 Prerequisites
 
-### Installation
+- **Node.js** 18+ (recommended: use [nvm](https://github.com/nvm-sh/nvm))
+- **npm** or **yarn** package manager
+- **Git** for version control
+- **MetaMask** or compatible Web3 wallet
 
-1. Clone the repository:
+### ⚡ Installation
+
 ```bash
+# 1. Clone the repository
 git clone https://github.com/Xavier4Dev/cipher-grant-lab.git
 cd cipher-grant-lab
-```
 
-2. Install dependencies:
-```bash
+# 2. Install dependencies
 npm install
-```
 
-3. Set up environment variables:
-```bash
-# Copy the example environment file
+# 3. Configure environment
 cp .env.example .env.local
+# Edit .env.local with your configuration
 
-# Edit the environment variables
-NEXT_PUBLIC_CHAIN_ID=11155111
-NEXT_PUBLIC_RPC_URL=https://sepolia.infura.io/v3/your-api-key
-NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=your-project-id
-```
-
-4. Start the development server:
-```bash
+# 4. Start development server
 npm run dev
 ```
 
-### Smart Contract Deployment
+### 🔧 Environment Configuration
 
-1. Compile contracts:
+Create `.env.local` with the following variables:
+
+```env
+# Blockchain Configuration
+NEXT_PUBLIC_CHAIN_ID=11155111
+NEXT_PUBLIC_RPC_URL=https://sepolia.infura.io/v3/YOUR_API_KEY
+NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=YOUR_PROJECT_ID
+```
+
+### 🚀 Smart Contract Deployment
+
 ```bash
+# Compile contracts
 npm run compile
-```
 
-2. Deploy to Sepolia testnet:
-```bash
+# Deploy to Sepolia testnet
 npm run deploy
+
+# Run tests
+npm run test
 ```
 
-## Project Structure
+## 📁 Project Architecture
 
 ```
-src/
-├── components/          # Reusable UI components
-├── pages/              # Application pages
-├── lib/                # Utility functions and configurations
-├── hooks/              # Custom React hooks
-contracts/              # Smart contracts
-├── CipherGrantLab.sol  # Main FHE contract
-├── MockERC20.sol       # Test token contract
-scripts/                # Deployment scripts
+cipher-grant-lab/
+├── 📁 contracts/              # Smart Contracts
+│   ├── 🔐 CipherGrantLab.sol  # Main FHE Contract
+│   └── 🪙 MockERC20.sol       # Test Token
+├── 📁 scripts/                # Deployment Scripts
+├── 📁 src/                    # Frontend Source
+│   ├── 📁 components/         # UI Components
+│   ├── 📁 pages/              # Application Pages
+│   ├── 📁 lib/                # Utilities & Config
+│   └── 📁 hooks/              # Custom React Hooks
+└── 📄 Configuration Files
 ```
 
-## Smart Contracts
+## 🔐 Smart Contract Features
 
-### CipherGrantLab.sol
-The main contract implementing FHE-encrypted grant management:
-- Encrypted grant creation and management
-- Private application submissions
-- Secure review and approval process
-- Token-based funding system
+### CipherGrantLab.sol - Core FHE Contract
 
-### Key Features
-- **FHE Encryption**: All sensitive data encrypted using FHEVM
-- **Access Control**: Role-based permissions for grantors and applicants
-- **Reentrancy Protection**: Secure against common attack vectors
-- **Event Logging**: Comprehensive event system for transparency
+| Feature | Description |
+|---------|-------------|
+| **🔒 Encrypted Data Storage** | All sensitive information encrypted using FHEVM |
+| **👥 Role-Based Access** | Granular permissions for grantors and applicants |
+| **🛡️ Security First** | Reentrancy protection and secure coding practices |
+| **📊 Event Transparency** | Comprehensive logging for audit trails |
+| **💰 Automated Funding** | Smart contract-based fund distribution |
 
 ## Development
 
